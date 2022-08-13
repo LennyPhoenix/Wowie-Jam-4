@@ -29,6 +29,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://entities/guns/Gun.gd"
 }, {
+"base": "PanelContainer",
+"class": "HealthBar",
+"language": "GDScript",
+"path": "res://HealthBar.gd"
+}, {
+"base": "Node2D",
+"class": "HealthManager",
+"language": "GDScript",
+"path": "res://entities/HealthManager.gd"
+}, {
 "base": "RayCast2D",
 "class": "LineOfSight",
 "language": "GDScript",
@@ -44,6 +54,8 @@ _global_script_class_icons={
 "DroneBullet": "",
 "GitAPI": "",
 "Gun": "",
+"HealthBar": "",
+"HealthManager": "",
 "LineOfSight": "",
 "PlayerGun": ""
 }

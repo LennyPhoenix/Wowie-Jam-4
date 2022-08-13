@@ -13,6 +13,8 @@ onready var left_gun: Gun = $Top/LeftGun
 onready var right_gun: Gun = $Top/RightGun
 onready var nav_target: Sprite = $Debug/Target
 onready var movement_direction: RayCast2D = $Debug/MoveIntention
+onready var health_manager: HealthManager = $HealthManager
+onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var tracking := false
 var tracker: Bullet
@@ -67,10 +69,13 @@ func deal_with_trackers() -> void:
 	# Horrendous tracking code
 	target_position = navigation.get_next_location()
 	if tracking:
+		animation_player.play("Walk")
 		var angle = target_position.angle_to_point(global_position)
 		legs.rotation = angle
 		if not shooting:
 			top.rotation = angle
+	else:
+		animation_player.play("Idle")
 	if not is_instance_valid(tracker):
 		tracking = false
 	if navigation.is_navigation_finished() and tracking:
@@ -97,3 +102,9 @@ func deal_with_killers() -> void:
 		top.global_rotation = shooting_target.global_position.angle_to_point(global_position)
 		left_gun.global_rotation = shooting_target.global_position.angle_to_point(left_gun.global_position)
 		right_gun.global_rotation = shooting_target.global_position.angle_to_point(right_gun.global_position)
+
+
+func _on_Hitbox_body_entered(body: Node) -> void:
+	if body.is_in_group("EnemyBullet"):
+		health_manager.damage(body.damage)
+		body.queue_free()

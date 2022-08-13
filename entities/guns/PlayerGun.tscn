@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://entities/guns/PlayerGun.gd" type="Script" id=2]
 [ext_resource path="res://entities/guns/Gun.tscn" type="PackedScene" id=3]
 
@@ -9,8 +8,6 @@ script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 position = Vector2( 3, 1.19209e-07 )
-scale = Vector2( 0.125, 0.03125 )
-texture = ExtResource( 1 )
 
 [node name="Emitter" parent="." index="2"]
 position = Vector2( 7, 0 )

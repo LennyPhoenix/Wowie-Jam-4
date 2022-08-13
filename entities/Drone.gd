@@ -5,6 +5,8 @@ onready var tracker_gun: PlayerGun = $TrackerGun
 onready var killer_gun: PlayerGun = $KillerGun
 onready var right_particles: Particles2D = $RightParticles
 onready var left_particles: Particles2D = $LeftParticles
+onready var health_manager: HealthManager = $HealthManager
+onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 export var max_speed := 200.0
 export var acceleration := 800.0
@@ -20,7 +22,12 @@ var rot_speed := 0.0
 var rot_intent := 0.0
 
 
+func _ready() -> void:
+	health_manager.set_as_toplevel(true)
+
+
 func _process(_delta: float) -> void:
+	health_manager.global_position = global_position - Vector2(0, 10)
 	move_intent = Input.get_axis("brake", "accelerate")
 	rot_intent = Input.get_axis("left", "right")
 
@@ -36,6 +43,10 @@ func _process(_delta: float) -> void:
 
 	left_particles.emitting = move_intent
 	right_particles.emitting = move_intent
+	if move_intent or rot_intent:
+		animation_player.play("Roll")
+	else:
+		animation_player.play("Idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -60,3 +71,9 @@ func _physics_process(delta: float) -> void:
 	var difference = (rot_intent * rot_target_speed) - rot_speed
 	rot_speed += sign(difference) * max(rot_acc, abs(difference))
 	rotation_degrees += rot_speed * delta
+
+
+func _on_Hitbox_body_entered(body: Node) -> void:
+	if body.is_in_group("EnemyBullet"):
+		health_manager.damage(body.damage)
+		body.queue_free()

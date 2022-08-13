@@ -15,12 +15,12 @@ export var max_speed := 100.0
 export var acceleration := 1500.0
 export var friction := 6000.0
 
-export var max_health := 100.0
-export var field_of_view := 100.0
+export var field_of_view := 90.0
 export var confirmed_angle := 10.0
 export var chase_distance := 130.0
 
 onready var gun: Gun = $RotateGroup/Gun
+onready var health_manager: HealthManager = $HealthManager
 onready var navigation: NavigationAgent2D = $Navigation
 onready var nav_target: Sprite = $Debug/Target
 onready var vision: Area2D = $RotateGroup/Vision
@@ -30,9 +30,9 @@ onready var rotate_group: Node2D = $RotateGroup
 onready var hitbox: Area2D = $Hitbox
 
 var state: int = State.PATROLLING setget set_state
-var health: float = max_health setget set_health
 var investigating := false
 var investigation_coroutine
+var engaged_target: Node2D
 const CANCEL = true
 
 var move_velocity := Vector2.ZERO
@@ -57,18 +57,27 @@ func _process(_delta: float) -> void:
 				navigation.set_target_location(current_point)
 		State.SUSPICIOUS:
 			if navigation.is_navigation_finished():
-				state = State.INVESTIGATING
+				self.state = State.INVESTIGATING
 				investigation_coroutine = investigate()
 		State.ENGAGING:
 			rotate_group.rotation = last_seen_position.angle_to_point(global_position)
 			gun.global_rotation = last_seen_position.angle_to_point(gun.global_position)
 
-	for node in get_tree().get_nodes_in_group("Player"):
-		var angle_to_player: float = node.global_position.angle_to_point(global_position)
-		var current_angle := rotate_group.global_rotation
-		var r_diff := angle_to_player - current_angle
-		if abs(rad2deg(r_diff)) <= field_of_view/2:
-			player_seen(node)
+	var fov_normal: Vector2 = Vector2.RIGHT.rotated(rotate_group.global_rotation)
+	for player in get_tree().get_nodes_in_group("Player"):
+		if line_of_sight.has_line_of_sight(player.global_position):
+			var player_normal: Vector2 = (player.global_position - global_position).normalized()
+			var r_diff = rad2deg(acos(fov_normal.dot(player_normal)))
+			if r_diff <= confirmed_angle/2:
+				self.state = State.ENGAGING
+				engaged_target = player
+			elif r_diff <= field_of_view/2:
+				if state == State.ENGAGING and player == engaged_target:
+					last_seen_position = player.global_position
+					nav_target.global_position = last_seen_position
+					navigation.set_target_location(last_seen_position)
+				else:
+					player_seen(player)
 
 	for body in vision.get_overlapping_bodies():
 		if body.is_in_group("Player"):
@@ -87,7 +96,6 @@ func _physics_process(delta: float) -> void:
 			move_intent = (target_position - global_position).normalized()
 		State.ENGAGING:
 			if global_position.distance_squared_to(last_seen_position) > pow(chase_distance, 2):
-				nav_target.global_position = target_position
 				move_intent = (target_position - global_position).normalized()
 
 	var acc: float = (acceleration if move_intent else friction) * delta
@@ -111,18 +119,12 @@ func _on_Listener_heard_sound(pos: Vector2) -> void:
 
 func _on_Hitbox_body_entered(body: Node) -> void:
 	if body.is_in_group("BotBullet"):
-		self.health -= body.damage
+		health_manager.damage(body.damage)
 		body.queue_free()
 
 
-func set_health(new_health: float):
-	health = new_health
-	if health < 0:
-		queue_free() # TODO: Death
-
-
 func player_seen(player: Node2D) -> void:
-	if line_of_sight.has_line_of_sight(player.global_position):
+	if state != State.ENGAGING:
 		self.state = State.SUSPICIOUS
 		last_seen_position = player.global_position
 		navigation.set_target_location(last_seen_position)
@@ -153,10 +155,17 @@ func investigate() -> void:
 	if res: return
 	res = yield(get_tree().create_timer(0.8), "timeout")
 	if res: return
-	state = State.PATROLLING
+	self.state = State.PATROLLING
 
 
 func set_state(new_state: int) -> void:
-	if new_state != State.INVESTIGATING and state == State.INVESTIGATING:
-		investigation_coroutine.resume(CANCEL)
+	if new_state != State.INVESTIGATING and state == State.INVESTIGATING and investigation_coroutine:
+		if investigation_coroutine.is_valid(true):
+			investigation_coroutine.resume(CANCEL)
+		investigation_coroutine = null
 	state = new_state
+
+
+func _on_ShootTimer_timeout() -> void:
+	if state == State.ENGAGING:
+		var _bullet = gun.shoot()

@@ -1,17 +1,23 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://Bot.gd" type="Script" id=2]
-[ext_resource path="res://entities/BotGun.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/guns/BotGun.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/LineOfSight.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 12.0
 
-[node name="Bot" type="KinematicBody2D"]
+[node name="Bot" type="KinematicBody2D" groups=["Player"]]
 collision_layer = 2
 script = ExtResource( 2 )
 
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
 [node name="Debug" type="Node2D" parent="."]
+visible = false
 
 [node name="Target" type="Sprite" parent="Debug"]
 scale = Vector2( 0.1, 0.1 )
@@ -36,9 +42,7 @@ position = Vector2( -7, 9 )
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
 
-[node name="LineOfSight" type="RayCast2D" parent="."]
-enabled = true
-cast_to = Vector2( 0, 0 )
+[node name="LineOfSight" parent="." instance=ExtResource( 4 )]
 
 [node name="Navigation" type="NavigationAgent2D" parent="."]
 path_desired_distance = 14.0
@@ -47,3 +51,5 @@ path_max_distance = 50.0
 avoidance_enabled = true
 radius = 30.0
 max_speed = 300.0
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]

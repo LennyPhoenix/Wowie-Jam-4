@@ -12,7 +12,12 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Bullet",
 "language": "GDScript",
-"path": "res://entities/Bullet.gd"
+"path": "res://entities/bullets/Bullet.gd"
+}, {
+"base": "Bullet",
+"class": "DroneBullet",
+"language": "GDScript",
+"path": "res://entities/bullets/DroneBullet.gd"
 }, {
 "base": "EditorVCSInterface",
 "class": "GitAPI",
@@ -22,17 +27,24 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "Gun",
 "language": "GDScript",
-"path": "res://entities/Gun.gd"
+"path": "res://entities/guns/Gun.gd"
 }, {
-"base": "Gun",
+"base": "RayCast2D",
+"class": "LineOfSight",
+"language": "GDScript",
+"path": "res://entities/LineOfSight.gd"
+}, {
+"base": "Reference",
 "class": "PlayerGun",
 "language": "GDScript",
-"path": "res://entities/PlayerGun.gd"
+"path": "res://entities/guns/PlayerGun.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
+"DroneBullet": "",
 "GitAPI": "",
 "Gun": "",
+"LineOfSight": "",
 "PlayerGun": ""
 }
 
@@ -46,7 +58,6 @@ config/icon="res://icon.png"
 
 window/size/width=640
 window/size/height=360
-window/size/fullscreen=true
 window/size/test_width=1280
 window/size/test_height=720
 window/stretch/mode="viewport"
@@ -64,6 +75,30 @@ singletons=[  ]
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/normal_map_invert_y": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [input]
 

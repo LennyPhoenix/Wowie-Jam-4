@@ -3,6 +3,8 @@ extends KinematicBody2D
 onready var camera: Camera2D = $Camera
 onready var tracker_gun: PlayerGun = $TrackerGun
 onready var killer_gun: PlayerGun = $KillerGun
+onready var right_particles: Particles2D = $RightParticles
+onready var left_particles: Particles2D = $LeftParticles
 
 export var max_speed := 200.0
 export var acceleration := 800.0
@@ -26,8 +28,14 @@ func _process(_delta: float) -> void:
 		get_tree().call_group("TrackerBullet", "destroy")
 		var bullet = tracker_gun.shoot()
 		bullet.target_position = get_global_mouse_position()
+		get_tree().call_group("Listener", "sound", global_position, 1.5)
 	if Input.is_action_just_pressed("shoot_right"):
-		var _bullet = killer_gun.shoot()
+		var bullet = killer_gun.shoot()
+		bullet.target_position = get_global_mouse_position()
+		get_tree().call_group("Listener", "sound", global_position, 1.0)
+
+	left_particles.emitting = move_intent
+	right_particles.emitting = move_intent
 
 
 func _physics_process(delta: float) -> void:

@@ -3,6 +3,7 @@ extends KinematicBody2D
 
 export var speed := 600.0
 export var target_radius := 30.0
+export var damage := 25.0
 
 var target_position: Vector2
 

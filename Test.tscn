@@ -1,28 +1,29 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://entities/Drone.tscn" type="PackedScene" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://entities/Bot.tscn" type="PackedScene" id=2]
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 12.0
+[sub_resource type="NavigationPolygon" id=2]
+vertices = PoolVector2Array( 207, -7, 196, -13, 208, -16, 278, -26, 312, -61, 441, -172, 403, 214, 244, 28, 98, -55, 118, 15, 13, -18, -174, -186, 186, -33, 195, -46, 145, -94, 138, -37, 84, 81, 167, 52, 183, 78, -155, 180, 191, 88, 206, -91 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 3, 4, 5, 6, 7 ), PoolIntArray( 8, 9, 10, 11 ), PoolIntArray( 3, 12, 13, 4 ), PoolIntArray( 14, 15, 8, 11 ), PoolIntArray( 16, 17, 18, 19 ), PoolIntArray( 7, 0, 3 ), PoolIntArray( 20, 7, 6 ), PoolIntArray( 20, 6, 19 ), PoolIntArray( 18, 20, 19 ), PoolIntArray( 16, 19, 11, 10 ), PoolIntArray( 14, 11, 5, 21 ), PoolIntArray( 21, 5, 4 ) ]
+outlines = [ PoolVector2Array( 13, -18, 118, 15, 98, -55, 138, -37, 145, -94, 206, -91, 312, -61, 195, -46, 186, -33, 278, -26, 208, -16, 196, -13, 207, -7, 244, 28, 191, 88, 183, 78, 167, 52, 84, 81 ), PoolVector2Array( -174, -186, 441, -172, 403, 214, -155, 180 ) ]
 
 [node name="Test" type="Node2D"]
 __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="NavigationPolygonInstance2" type="NavigationPolygonInstance" parent="."]
+navpoly = SubResource( 2 )
+
 [node name="Drone" parent="." instance=ExtResource( 1 )]
-position = Vector2( 58, 49 )
+position = Vector2( 71, 93 )
+rotation = -1.5344
 
-[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
-position = Vector2( 94, 43 )
+[node name="Bot" parent="." instance=ExtResource( 2 )]
 
-[node name="Sprite" type="Sprite" parent="KinematicBody2D"]
-scale = Vector2( 0.376, 0.376 )
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 2 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2( 67, -6 )
+polygon = PoolVector2Array( 88, 11, 124, -9, 170, 33, 125, 82, 104, 46, 19, 76, -42, -2, 72, 45, 41, -35, 76, -13, 89, -78, 134, -76, 230, -56, 121, -43, 103, -22, 188, -20, 107, -10 )

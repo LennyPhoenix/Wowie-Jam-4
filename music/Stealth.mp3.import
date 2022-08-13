@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Stealth.mp3-c787efaab412c8dc86cbe73cc7b59afb.mp3str"
+
+[deps]
+
+source_file="res://music/Stealth.mp3"
+dest_files=[ "res://.import/Stealth.mp3-c787efaab412c8dc86cbe73cc7b59afb.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

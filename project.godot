@@ -9,13 +9,31 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://entities/Bullet.gd"
+}, {
 "base": "EditorVCSInterface",
 "class": "GitAPI",
 "language": "NativeScript",
 "path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "Node2D",
+"class": "Gun",
+"language": "GDScript",
+"path": "res://entities/Gun.gd"
+}, {
+"base": "Gun",
+"class": "PlayerGun",
+"language": "GDScript",
+"path": "res://entities/PlayerGun.gd"
 } ]
 _global_script_class_icons={
-"GitAPI": ""
+"Bullet": "",
+"GitAPI": "",
+"Gun": "",
+"PlayerGun": ""
 }
 
 [application]
@@ -26,8 +44,8 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=320
-window/size/height=180
+window/size/width=640
+window/size/height=360
 window/size/fullscreen=true
 window/size/test_width=1280
 window/size/test_height=720
@@ -79,6 +97,13 @@ shoot_right={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="Environment"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemy"
+2d_physics/layer_4="Bullet"
 
 [physics]
 

@@ -1,0 +1,105 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/Tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://entities/Drone.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/Bot.tscn" type="PackedScene" id=3]
+[ext_resource path="res://levels/Level.gd" type="Script" id=4]
+[ext_resource path="res://fonts/pocod.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://ui/Main.tres" type="Theme" id=6]
+[ext_resource path="res://tools/ConditionCollector.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/Lift.tscn" type="PackedScene" id=8]
+
+[sub_resource type="DynamicFont" id=1]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_space = 16
+font_data = ExtResource( 5 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="ConditionCollector" parent="." instance=ExtResource( 7 )]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Failure" type="Control" parent="UI"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="UI/Failure"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -147.0
+margin_top = -69.0
+margin_right = 165.0
+margin_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_colors/font_color = Color( 0.956863, 0.247059, 0.247059, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Big Brother died"
+
+[node name="Restart" type="Button" parent="UI/Failure"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -40.0
+margin_top = -10.0
+margin_right = 42.0
+margin_bottom = 10.0
+theme = ExtResource( 6 )
+text = "Restart"
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Floor" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+collision_mask = 0
+bake_navigation = true
+format = 1
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Bot" parent="Entities" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+
+[node name="Drone" parent="Entities" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+
+[node name="Lift" parent="Entities" instance=ExtResource( 8 )]
+z_index = 1
+
+[node name="Vents" type="TileMap" parent="."]
+modulate = Color( 1, 1, 1, 0.784314 )
+z_index = 1
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 16
+collision_mask = 0
+bake_navigation = true
+navigation_layers = 2
+format = 1
+
+[node name="Walls" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="PatrolPoints" type="Node2D" parent="."]
+
+[connection signal="pressed" from="UI/Failure/Restart" to="." method="_on_Restart_pressed"]
+[connection signal="dead" from="Entities/Bot" to="." method="_on_Bot_dead"]
+[connection signal="dead" from="Entities/Drone" to="." method="_on_Drone_dead"]
+[connection signal="bot_entered" from="Entities/Lift" to="." method="_on_Lift_bot_entered"]

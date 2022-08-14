@@ -1,10 +1,14 @@
+class_name Bot
 extends KinematicBody2D
+
+signal dead()
 
 export var max_speed := 300.0
 export var acceleration := 1000.0
 export var friction := 3000.0
 
 onready var line_of_sight: LineOfSight = $LineOfSight
+onready var particles_2d: Particles2D = $Particles2D
 onready var navigation: NavigationAgent2D = $Navigation
 onready var shoot_timer: Timer = $ShootTimer
 onready var legs: Node2D = $Legs
@@ -25,15 +29,21 @@ var shooting := false
 var shooting_target: Bullet
 var right_gun_next := false
 
+var dead := false
+
 var move_velocity := Vector2.ZERO
 
 
 func _process(_delta: float) -> void:
-	deal_with_trackers()
-	deal_with_killers()
+	if not dead:
+		deal_with_trackers()
+		deal_with_killers()
 
 
 func _physics_process(delta: float) -> void:
+	if dead:
+		return
+
 	var move_intent := Vector2.ZERO
 	if tracking:
 		nav_target.global_position = target_position
@@ -49,7 +59,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_ShootTimer_timeout() -> void:
-	if shooting:
+	if shooting and not dead:
 		if right_gun_next:
 			var _bullet = right_gun.shoot()
 		else:
@@ -60,20 +70,19 @@ func _on_ShootTimer_timeout() -> void:
 func deal_with_trackers() -> void:
 	for bullet in get_tree().get_nodes_in_group("TrackerBullet"):
 		if not bullet.deleting and (not tracking or bullet == tracker):
-			if line_of_sight.has_line_of_sight(bullet.global_position):
-				last_tracker_position = bullet.global_position
-				navigation.set_target_location(last_tracker_position)
-				tracker = bullet
-				tracking = true
+			last_tracker_position = bullet.global_position
+			navigation.set_target_location(last_tracker_position)
+			tracker = bullet
+			tracking = true
 
 	# Horrendous tracking code
 	target_position = navigation.get_next_location()
 	if tracking:
 		animation_player.play("Walk")
 		var angle = target_position.angle_to_point(global_position)
-		legs.rotation = angle
+		legs.global_rotation = angle
 		if not shooting:
-			top.rotation = angle
+			top.global_rotation = angle
 	else:
 		animation_player.play("Idle")
 	if not is_instance_valid(tracker):
@@ -108,3 +117,11 @@ func _on_Hitbox_body_entered(body: Node) -> void:
 	if body.is_in_group("EnemyBullet"):
 		health_manager.damage(body.damage)
 		body.queue_free()
+
+
+func _on_HealthManager_dead() -> void:
+	if not dead:
+		dead = true
+		emit_signal("dead")
+		animation_player.play("Dead")
+		particles_2d.emitting = true

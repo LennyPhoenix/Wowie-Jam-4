@@ -6,6 +6,13 @@ export var destroy_time := 0.1
 var can_delete := false
 var deleting := false
 
+onready var start_pos := global_position
+
+
+func _process(_delta: float) -> void:
+	if start_pos.distance_squared_to(global_position) > pow(500, 2):
+		destroy()
+
 
 func destroy() -> void:
 	if not deleting and can_delete:

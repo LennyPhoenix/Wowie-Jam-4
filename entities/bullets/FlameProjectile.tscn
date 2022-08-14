@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/bullets/EnemyBullet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://sprites/Flame.png" type="Texture" id=2]
+[ext_resource path="res://entities/bullets/FlameProjectile.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 4.12311
+
+[node name="FlameProjectile" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+speed = 100.0
+damage = 10.0
+slow_time = 1.5
+
+[node name="Sprite" parent="." index="0"]
+rotation = -1.57079
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource( 1 )
+
+[node name="DeleteTimer" parent="." index="2"]
+wait_time = 1.5

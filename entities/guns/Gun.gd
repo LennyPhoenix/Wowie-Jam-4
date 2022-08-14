@@ -6,6 +6,7 @@ export var spread := 5.0
 
 onready var emitter: Position2D = $Emitter
 onready var animation_player: AnimationPlayer = $AnimationPlayer
+onready var gunshot: AudioStreamPlayer2D = $Gunshot
 
 
 func shoot() -> Bullet:
@@ -13,6 +14,8 @@ func shoot() -> Bullet:
 
 	if animation_player.has_animation("Shoot"):
 		animation_player.play("Shoot")
+
+	gunshot.play()
 
 	var bullet: Bullet = bullet_scene.instance()
 	bullet.set_as_toplevel(true)

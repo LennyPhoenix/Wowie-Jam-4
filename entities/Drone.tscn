@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://sprites/TireTracks.png" type="Texture" id=1]
 [ext_resource path="res://entities/Drone.gd" type="Script" id=2]
@@ -7,9 +7,12 @@
 [ext_resource path="res://entities/bullets/KillerBullet.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/Drone.png" type="Texture" id=6]
 [ext_resource path="res://assets/TireTracks.tres" type="Material" id=7]
-[ext_resource path="res://entities/HealthManager.tscn" type="PackedScene" id=8]
+[ext_resource path="res://tools/HealthManager.tscn" type="PackedScene" id=8]
 [ext_resource path="res://sprites/TrackerGun.png" type="Texture" id=9]
 [ext_resource path="res://sprites/KillerGun.png" type="Texture" id=10]
+[ext_resource path="res://assets/Scatter.tres" type="Material" id=11]
+[ext_resource path="res://sprites/RedParticles.png" type="Texture" id=12]
+[ext_resource path="res://sfx/Death.wav" type="AudioStream" id=13]
 
 [sub_resource type="Animation" id=3]
 resource_name = "Idle"
@@ -80,6 +83,7 @@ anims/Roll = SubResource( 5 )
 
 [node name="HealthManager" parent="." instance=ExtResource( 8 )]
 position = Vector2( 0, -10 )
+regen_amount = 20.0
 
 [node name="RightParticles" type="Particles2D" parent="."]
 position = Vector2( 0, 5 )
@@ -120,6 +124,7 @@ frame = 2
 [node name="TrackerGun" parent="." instance=ExtResource( 3 )]
 position = Vector2( -2, -3 )
 bullet_scene = ExtResource( 4 )
+spread = 0.0
 
 [node name="Sprite" parent="TrackerGun" index="1"]
 texture = ExtResource( 9 )
@@ -131,6 +136,20 @@ bullet_scene = ExtResource( 5 )
 [node name="Sprite" parent="KillerGun" index="1"]
 texture = ExtResource( 10 )
 
+[node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 0, 0, 0, 0.780392 )
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 0.55
+process_material = ExtResource( 11 )
+texture = ExtResource( 12 )
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+volume_db = -12.0
+
+[connection signal="dead" from="HealthManager" to="." method="_on_HealthManager_dead"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
 
 [editable path="TrackerGun"]

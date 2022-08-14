@@ -62,6 +62,9 @@ func _process(_delta: float) -> void:
 		State.ENGAGING:
 			rotate_group.rotation = last_seen_position.angle_to_point(global_position)
 			gun.global_rotation = last_seen_position.angle_to_point(gun.global_position)
+			if navigation.is_navigation_finished():
+				self.state = State.INVESTIGATING
+				investigation_coroutine = investigate()
 
 	var fov_normal: Vector2 = Vector2.RIGHT.rotated(rotate_group.global_rotation)
 	for player in get_tree().get_nodes_in_group("Player"):
@@ -95,7 +98,7 @@ func _physics_process(delta: float) -> void:
 			nav_target.global_position = target_position
 			move_intent = (target_position - global_position).normalized()
 		State.ENGAGING:
-			if global_position.distance_squared_to(last_seen_position) > pow(chase_distance, 2):
+			if global_position.distance_squared_to(engaged_target.global_position) > pow(chase_distance, 2):
 				move_intent = (target_position - global_position).normalized()
 
 	var acc: float = (acceleration if move_intent else friction) * delta

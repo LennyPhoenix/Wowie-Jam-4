@@ -12,8 +12,8 @@ export var regen_time := 2.0
 export var regen_acceleration := 0.15
 export var regen_amount := 5.0
 
-var current_regen_time := regen_time
-var health := max_health setget set_health
+onready var current_regen_time := regen_time
+onready var health := max_health setget set_health
 
 
 func set_health(new_health: float) -> void:

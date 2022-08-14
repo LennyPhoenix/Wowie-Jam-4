@@ -18,7 +18,7 @@ export var friction := 6000.0
 
 export var field_of_view := 90.0
 export var confirmed_angle := 10.0
-export var chase_distance := 130.0
+export var chase_distance := 60.0
 
 onready var gun: Gun = $RotateGroup/Gun
 onready var collider: CollisionShape2D = $Collider

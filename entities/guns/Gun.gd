@@ -7,6 +7,7 @@ export var spread := 5.0
 onready var emitter: Position2D = $Emitter
 onready var animation_player: AnimationPlayer = $AnimationPlayer
 onready var gunshot: AudioStreamPlayer2D = $Gunshot
+var entities: Node2D
 
 
 func shoot() -> Bullet:
@@ -21,6 +22,13 @@ func shoot() -> Bullet:
 	bullet.set_as_toplevel(true)
 	bullet.global_transform = emitter.global_transform
 	bullet.rotation_degrees += (randf()*2-1)*spread
-	add_child(bullet)
+
+	if not entities:
+		var parent: Node = get_parent()
+		while parent.name != "Entities":
+			parent = parent.get_parent()
+		entities = parent
+
+	entities.add_child(bullet)
 
 	return bullet

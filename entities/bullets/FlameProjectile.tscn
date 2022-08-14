@@ -9,9 +9,9 @@ radius = 4.12311
 
 [node name="FlameProjectile" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
-speed = 100.0
-damage = 10.0
-slow_time = 1.5
+speed = 130.0
+damage = 20.0
+slow_time = 1.1
 
 [node name="Sprite" parent="." index="0"]
 rotation = -1.57079

@@ -22,5 +22,6 @@ spread = 25.0
 
 [node name="Gunshot" parent="RotateGroup/Gun" index="2"]
 stream = ExtResource( 4 )
+volume_db = -24.0
 
 [editable path="RotateGroup/Gun"]

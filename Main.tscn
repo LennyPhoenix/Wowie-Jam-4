@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ui/Main.tres" type="Theme" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -8,11 +8,13 @@
 [ext_resource path="res://music/Stealth.mp3" type="AudioStream" id=6]
 [ext_resource path="res://music/Death.mp3" type="AudioStream" id=7]
 [ext_resource path="res://levels/Combat1.tscn" type="PackedScene" id=8]
+[ext_resource path="res://levels/Combat2.tscn" type="PackedScene" id=9]
+[ext_resource path="res://levels/Arena1.tscn" type="PackedScene" id=10]
+[ext_resource path="res://levels/CompletionScreen.tscn" type="PackedScene" id=11]
 
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
-levels = [ ExtResource( 3 ), ExtResource( 8 ) ]
-current_level = 1
+levels = [ ExtResource( 3 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ]
 
 [node name="Music" type="Node" parent="."]
 

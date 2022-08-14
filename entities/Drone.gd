@@ -41,6 +41,7 @@ func _process(_delta: float) -> void:
 	rot_intent = Input.get_axis("left", "right")
 
 	if Input.is_action_just_pressed("shoot_left"):
+		get_tree().call_group("TrackerBullet", "set", "can_delete", true)
 		get_tree().call_group("TrackerBullet", "destroy")
 		var bullet = tracker_gun.shoot()
 		bullet.target_position = get_global_mouse_position()

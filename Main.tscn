@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/Main.tres" type="Theme" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -11,10 +11,13 @@
 [ext_resource path="res://levels/Combat2.tscn" type="PackedScene" id=9]
 [ext_resource path="res://levels/Arena1.tscn" type="PackedScene" id=10]
 [ext_resource path="res://levels/CompletionScreen.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/Settings.tscn" type="PackedScene" id=12]
+[ext_resource path="res://levels/Arena2.tscn" type="PackedScene" id=13]
+[ext_resource path="res://sprites/Logo.png" type="Texture" id=14]
 
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
-levels = [ ExtResource( 3 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ]
+levels = [ ExtResource( 3 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 13 ), ExtResource( 11 ) ]
 
 [node name="Music" type="Node" parent="."]
 
@@ -38,25 +41,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
 
+[node name="Logo" type="Sprite" parent="UI/Control"]
+position = Vector2( 247, 109 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 14 )
+
+[node name="Settings" parent="UI/Control" instance=ExtResource( 12 )]
+
 [node name="Start" type="Button" parent="UI/Control"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -48.0
-margin_top = -10.0
-margin_right = 48.0
-margin_bottom = 10.0
+margin_left = -49.0
+margin_top = 42.0
+margin_right = 47.0
+margin_bottom = 62.0
 grow_horizontal = 2
 text = "Start Game"
 
-[node name="Pixelated" type="Button" parent="UI/Control"]
-margin_left = 4.0
-margin_top = 5.0
-margin_right = 160.0
-margin_bottom = 25.0
-toggle_mode = true
-text = "Toggle Pixelated"
-
 [connection signal="pressed" from="UI/Control/Start" to="." method="_on_Start_pressed"]
-[connection signal="toggled" from="UI/Control/Pixelated" to="." method="_on_Pixelated_toggled"]

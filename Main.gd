@@ -42,6 +42,9 @@ func set_attacking_music(new_attacking_music: bool) -> void:
 
 
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("fullscreen"):
+		OS.window_fullscreen = not OS.window_fullscreen
+
 	if not menu_music:
 		var sneaking = true
 		for node in get_tree().get_nodes_in_group("Enemy"):
@@ -76,8 +79,3 @@ func _on_Level_failed() -> void:
 	yield(death, "finished")
 	if menu_music:
 		menu.play()
-
-
-func _on_Pixelated_toggled(on: bool) -> void:
-	var mode = SceneTree.STRETCH_MODE_VIEWPORT if on else SceneTree.STRETCH_MODE_2D
-	get_tree().set_screen_stretch(mode, SceneTree.STRETCH_ASPECT_KEEP, Vector2(480, 270))

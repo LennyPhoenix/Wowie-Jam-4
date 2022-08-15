@@ -156,13 +156,6 @@ texture = ExtResource( 2 )
 
 [node name="RotateGroup" type="Node2D" parent="."]
 
-[node name="Vision" type="Area2D" parent="RotateGroup"]
-collision_layer = 0
-collision_mask = 2
-
-[node name="Collider" type="CollisionPolygon2D" parent="RotateGroup/Vision"]
-polygon = PoolVector2Array( 0, 0, -14, -13, 13, -13, 13, 13, -14, 13 )
-
 [node name="Sprite" type="Sprite" parent="RotateGroup"]
 texture = ExtResource( 10 )
 hframes = 4

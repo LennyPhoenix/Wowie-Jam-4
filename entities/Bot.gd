@@ -64,6 +64,7 @@ func _on_ShootTimer_timeout() -> void:
 			var _bullet = right_gun.shoot()
 		else:
 			var _bullet = left_gun.shoot()
+		get_tree().call_group("Listener", "sound", global_position, 3.0)
 		right_gun_next = not right_gun_next
 
 

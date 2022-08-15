@@ -102,6 +102,8 @@ func _physics_process(delta: float) -> void:
 			nav_target.global_position = target_position
 			move_intent = (target_position - global_position).normalized()
 		State.ENGAGING:
+			if not is_instance_valid(engaged_target):
+				return
 			if global_position.distance_squared_to(engaged_target.global_position) > pow(chase_distance, 2):
 				move_intent = (target_position - global_position).normalized()
 		State.DEAD:

@@ -76,3 +76,8 @@ func _on_Level_failed() -> void:
 	yield(death, "finished")
 	if menu_music:
 		menu.play()
+
+
+func _on_Pixelated_toggled(on: bool) -> void:
+	var mode = SceneTree.STRETCH_MODE_VIEWPORT if on else SceneTree.STRETCH_MODE_2D
+	get_tree().set_screen_stretch(mode, SceneTree.STRETCH_ASPECT_KEEP, Vector2(480, 270))

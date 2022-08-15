@@ -33,17 +33,30 @@ stream = ExtResource( 7 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Start" type="Button" parent="UI"]
+[node name="Control" type="Control" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+
+[node name="Start" type="Button" parent="UI/Control"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -46.0
+margin_left = -48.0
 margin_top = -10.0
-margin_right = 46.0
+margin_right = 48.0
 margin_bottom = 10.0
 grow_horizontal = 2
-theme = ExtResource( 1 )
 text = "Start Game"
 
-[connection signal="pressed" from="UI/Start" to="." method="_on_Start_pressed"]
+[node name="Pixelated" type="Button" parent="UI/Control"]
+margin_left = 4.0
+margin_top = 5.0
+margin_right = 160.0
+margin_bottom = 25.0
+toggle_mode = true
+text = "Toggle Pixelated"
+
+[connection signal="pressed" from="UI/Control/Start" to="." method="_on_Start_pressed"]
+[connection signal="toggled" from="UI/Control/Pixelated" to="." method="_on_Pixelated_toggled"]
